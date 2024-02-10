@@ -278,7 +278,7 @@ ob_end_clean();
                 ?>
                 <form class="form" method="post">
                     <div class="inputBox">
-                        <input type="email" required name="email"> <i>Username</i>
+                        <input type="text" required name="email"> <i>Username</i>
                     </div>
                     <div class="inputBox">
                         <input type="password" required name="password"> <i>Password</i>
@@ -293,5 +293,4 @@ ob_end_clean();
         </div>
     </section>
 </body>
-
 </html>
