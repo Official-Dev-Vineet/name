@@ -3,7 +3,7 @@ session_start();
 ob_start();
 // Check if the user is already logged in, redirect to dashboard if logged in
 if (isset($_SESSION['user_id'])) {
-    header("Location: master.php");
+    header("Location: admin_master.php");
     exit;
 }
 // Check if the form is submitted
@@ -14,18 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST["email"];
     $password = $_POST["password"];
     // Prepare a select statement
-    $sql = "SELECT RegistrationId, EmailId, password FROM register WHERE username = ?";
+    $sql = "SELECT Sno, username, password FROM admin_login WHERE username = ?";
     if ($stmt = $mysqli->prepare($sql)) {
         // Bind variables to the prepared statement as parameters
         $stmt->bind_param("s", $param_username);
         // Set parameters
         $param_username = $username;
-
         // Attempt to execute the prepared statement
         if ($stmt->execute()) {
             // Store result
             $stmt->store_result();
-
             // Check if username exists, if yes then verify password
             if ($stmt->num_rows == 1) {
                 // Bind result variables
@@ -34,13 +32,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     if ($password == $hashed_password) {
                         // Password is correct, start a new session
                         session_start();
-
                         // Store data in session variables
-                        $_SESSION["user_id"] = $id;
+                        $_SESSION["user_id"] = $id."admin";
                         $_SESSION["username"] = $username;
-
                         // Redirect user to dashboard page
-                        header("location: master.php");
+                        header("location: admin_master.php");
                     } else {
                         // Password is not valid, display a generic error message
                         $login_err = "Invalid username or password.";
@@ -53,11 +49,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "Oops! Something went wrong. Please try again later.";
         }
-
         // Close statement
         $stmt->close();
     }
-
     // Close connection
     $mysqli->close();
 }
